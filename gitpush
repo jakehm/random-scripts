@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#must be executed in src directory
+#usage:
+#$ github
+#then follow prompt
+
+# prompt user for commit message
+read -p 'Message > ' message
+
+#read config file, which contains username and password for github
+#username="USERNAME"
+#password="PASSWORD"
+source github.config
+
+git add .
+git commit -m "$message"
+#calling expect to run until END
+expect << END
+
+spawn git push origin master
+
+expect ": "
+send "$username\r"
+
+expect ": "
+send "$password\r\n"
+
+expect "$ "
+END
